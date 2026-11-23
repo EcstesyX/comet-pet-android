@@ -79,15 +79,15 @@
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPermission"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/accent_gold"
                 android:text="@string/grant_permission"
                 android:textColor="#12131A"
-                app:cornerRadius="10dp" />
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="match_parent"
@@ -97,7 +97,7 @@
         </LinearLayout>
 
         <!-- Toggle Autostart -->
-        <com.google.android.material.materialswitch.MaterialSwitch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchAutostart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             android:background="@color/surface_variant" />
 
         <!-- Toggle Clipboard Reactions -->
-        <com.google.android.material.materialswitch.MaterialSwitch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchClipboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -129,28 +129,28 @@
 
         <!-- Size Slider -->
         <TextView
+            android:id="@+id/tvSizeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting_size"
             android:textColor="@color/on_surface"
             android:textSize="15sp" />
 
-        <com.google.android.material.slider.Slider
+        <SeekBar
             android:id="@+id/sliderSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:valueFrom="60.0"
-            android:valueTo="140.0"
-            android:stepSize="10.0"
-            android:value="90.0"
-            app:thumbColor="@color/primary"
-            app:trackColorActive="@color/primary"
-            app:trackColorInactive="@color/surface_variant" />
+            android:layout_marginTop="8dp"
+            android:max="140"
+            android:min="60"
+            android:progress="96"
+            android:progressTint="@color/primary"
+            android:thumbTint="@color/primary" />
 
     </LinearLayout>
 
     <!-- Bottom Action Button -->
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnTogglePet"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -160,7 +160,6 @@
         android:textColor="@color/on_primary"
         android:textSize="17sp"
         android:textStyle="bold"
-        app:cornerRadius="14dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

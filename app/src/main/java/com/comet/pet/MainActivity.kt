@@ -1,10 +1,8 @@
 package com.comet.pet
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,25 +13,27 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.slider.Slider
 
 class MainActivity : AppCompatActivity() {
 
     private val tag = "CometPetMain"
     private lateinit var prefs: SharedPreferences
     private var layoutPermission: LinearLayout? = null
-    private var btnPermission: MaterialButton? = null
-    private var switchAutostart: MaterialSwitch? = null
-    private var switchClipboard: MaterialSwitch? = null
-    private var sliderSize: Slider? = null
-    private var btnTogglePet: MaterialButton? = null
+    private var btnPermission: AppCompatButton? = null
+    private var switchAutostart: SwitchCompat? = null
+    private var switchClipboard: SwitchCompat? = null
+    private var sliderSize: SeekBar? = null
+    private var tvSizeLabel: TextView? = null
+    private var btnTogglePet: AppCompatButton? = null
     private var ivLogo: ImageView? = null
 
     private val overlayPermissionLauncher = registerForActivityResult(
@@ -44,14 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Global uncaught exception logger
-        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
-        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            Log.e(tag, "FATAL CRASH in MainActivity: ${throwable.message}", throwable)
-            defaultHandler?.uncaughtException(thread, throwable)
-        }
-
         try {
             setContentView(R.layout.activity_main)
 
@@ -62,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             switchAutostart = findViewById(R.id.switchAutostart)
             switchClipboard = findViewById(R.id.switchClipboard)
             sliderSize = findViewById(R.id.sliderSize)
+            tvSizeLabel = findViewById(R.id.tvSizeLabel)
             btnTogglePet = findViewById(R.id.btnTogglePet)
             ivLogo = findViewById(R.id.ivLogo)
 
@@ -111,26 +104,26 @@ class MainActivity : AppCompatActivity() {
             prefs.edit().putBoolean(CometOverlayService.PREF_CLIPBOARD_REACTION, isChecked).apply()
         }
 
-        sliderSize?.let { slider ->
-            try {
-                slider.valueFrom = 60.0f
-                slider.valueTo = 140.0f
-                slider.stepSize = 10.0f
-                val currentSize = prefs.getInt(CometOverlayService.PREF_PET_SIZE_DP, 96).toFloat()
-                slider.value = currentSize.coerceIn(slider.valueFrom, slider.valueTo)
+        sliderSize?.let { seekBar ->
+            val currentSize = prefs.getInt(CometOverlayService.PREF_PET_SIZE_DP, 96).coerceIn(60, 140)
+            seekBar.progress = currentSize
+            tvSizeLabel?.text = "Размер лисёнка: ${currentSize} dp"
 
-                slider.addOnChangeListener { _, value, _ ->
-                    prefs.edit().putInt(CometOverlayService.PREF_PET_SIZE_DP, value.toInt()).apply()
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                    val finalVal = progress.coerceIn(60, 140)
+                    tvSizeLabel?.text = "Размер лисёнка: ${finalVal} dp"
+                    prefs.edit().putInt(CometOverlayService.PREF_PET_SIZE_DP, finalVal).apply()
                     if (isServiceRunning()) {
-                        val intent = Intent(this, CometOverlayService::class.java).apply {
+                        val intent = Intent(this@MainActivity, CometOverlayService::class.java).apply {
                             action = CometOverlayService.ACTION_UPDATE_SETTINGS
                         }
                         startService(intent)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(tag, "Error setting up slider", e)
-            }
+                override fun onStartTrackingTouch(sb: SeekBar?) {}
+                override fun onStopTrackingTouch(sb: SeekBar?) {}
+            })
         }
 
         btnTogglePet?.setOnClickListener {
@@ -170,7 +163,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 Settings.canDrawOverlays(this)
             } catch (e: Exception) {
-                true
+                false
             }
         } else {
             true
@@ -185,25 +178,17 @@ class MainActivity : AppCompatActivity() {
             if (running) {
                 btn.text = getString(R.string.btn_stop_pet)
                 val color = ContextCompat.getColor(this, R.color.surface_variant)
-                btn.backgroundTintList = ColorStateList.valueOf(color)
+                btn.setBackgroundColor(color)
             } else {
                 btn.text = getString(R.string.btn_start_pet)
                 val color = ContextCompat.getColor(this, R.color.primary)
-                btn.backgroundTintList = ColorStateList.valueOf(color)
+                btn.setBackgroundColor(color)
             }
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun isServiceRunning(): Boolean {
-        return try {
-            val manager = getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager ?: return false
-            val services = manager.getRunningServices(Int.MAX_VALUE) ?: return false
-            services.any { it.service.className == CometOverlayService::class.java.name }
-        } catch (e: Exception) {
-            Log.e(tag, "Error checking running services", e)
-            false
-        }
+        return CometServiceState.isRunning
     }
 
     private fun startLogoAnimation() {

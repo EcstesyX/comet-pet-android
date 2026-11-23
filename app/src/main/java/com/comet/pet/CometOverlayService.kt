@@ -12,6 +12,10 @@ import android.view.Gravity
 import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 
+object CometServiceState {
+    var isRunning: Boolean = false
+}
+
 class CometOverlayService : Service(), PetView.Listener {
 
     companion object {
@@ -51,32 +55,15 @@ class CometOverlayService : Service(), PetView.Listener {
 
     override fun onCreate() {
         super.onCreate()
+        CometServiceState.isRunning = true
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         createNotificationChannel()
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                startForeground(
-                    NOTIFICATION_ID,
-                    buildNotification(),
-                    android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-                )
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(
-                    NOTIFICATION_ID,
-                    buildNotification(),
-                    android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-                )
-            } else {
-                startForeground(NOTIFICATION_ID, buildNotification())
-            }
-        } catch (e: Exception) {
-            try {
-                startForeground(NOTIFICATION_ID, buildNotification())
-            } catch (_: Exception) {}
-        }
+            startForeground(NOTIFICATION_ID, buildNotification())
+        } catch (_: Exception) {}
 
         setupOverlay()
 
@@ -203,6 +190,7 @@ class CometOverlayService : Service(), PetView.Listener {
 
     override fun onDestroy() {
         super.onDestroy()
+        CometServiceState.isRunning = false
         clipboardManager?.removePrimaryClipChangedListener(clipListener)
         petView?.stop()
         if (petView != null && petView?.isAttachedToWindow == true) {

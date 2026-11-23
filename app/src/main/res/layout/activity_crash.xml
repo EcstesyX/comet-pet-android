@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#12131A"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Произошла ошибка при запуске"
+        android:textColor="#FF7043"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Пожалуйста, скопируйте текст ошибки ниже:"
+        android:textColor="#9CA3AF"
+        android:textSize="14sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="16dp"
+        android:layout_weight="1"
+        android:background="#1E202C"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvCrashDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textColor="#F3F5FC"
+            android:textSize="12sp" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnCopyError"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:backgroundTint="#FF7043"
+        android:text="Скопировать ошибку"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+</LinearLayout>
