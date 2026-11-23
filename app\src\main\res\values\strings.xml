@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Комета</string>
+    <string name="title_pet">Комета — Твой карманный лисёнок</string>
+    <string name="subtitle_pet">Интерактивный питомец на экране твоего смартфона</string>
+    <string name="overlay_permission_title">Разрешение поверх других окон</string>
+    <string name="overlay_permission_desc">Чтобы Комета могла бегать по экрану поверх всех приложений, разрешите отображение поверх окон.</string>
+    <string name="grant_permission">Предоставить доступ</string>
+    <string name="btn_start_pet">Выпустить Комету на экран</string>
+    <string name="btn_stop_pet">Спрятать Комету</string>
+    <string name="notification_title">Комета на экране</string>
+    <string name="notification_text">Лисёнок гуляет по экрану</string>
+    <string name="action_feed">Покормить</string>
+    <string name="action_sleep">Уложить спать</string>
+    <string name="action_wake">Разбудить</string>
+    <string name="action_dismiss">Закрыть</string>
+    <string name="setting_size">Размер лисёнка</string>
+    <string name="setting_autostart">Запуск при включении телефона</string>
+    <string name="setting_clipboard">Реакция на буфер обмена</string>
+</resources>

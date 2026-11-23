@@ -1,0 +1,14 @@
+<resources>
+    <color name="primary">#FF7043</color>
+    <color name="primary_variant">#F4511E</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="secondary">#FFA726</color>
+    <color name="background">#12131A</color>
+    <color name="surface">#1E202C</color>
+    <color name="surface_variant">#292C3D</color>
+    <color name="on_surface">#F3F5FC</color>
+    <color name="text_secondary">#9CA3AF</color>
+    <color name="accent_gold">#FFD54F</color>
+    <color name="bubble_bg">#FFFDF9</color>
+    <color name="bubble_text">#1F2437</color>
+</resources>
