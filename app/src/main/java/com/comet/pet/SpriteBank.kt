@@ -64,7 +64,7 @@ class SpriteBank(private val context: Context, private val displaySizePx: Int) {
             }
             PetState.GRABBED -> "grabbed"
             PetState.THROWN -> "thrown"
-            PetState.HAPPY_PET -> "happy_pet"
+            PetState.HAPPY_PET, PetState.PETTED -> "happy_pet"
             PetState.EAT -> {
                 val frame = ((stateTime * 4.5f).toInt() % 2) + 1
                 "eat_$frame"
@@ -77,6 +77,7 @@ class SpriteBank(private val context: Context, private val displaySizePx: Int) {
             PetState.REACT_NUMBER -> "react_number"
             PetState.REACT_CODE -> "react_code"
             PetState.REACT_LONGTEXT -> "react_longtext"
+            else -> "idle_1"
         }
         return get(pose, facingRight)
     }

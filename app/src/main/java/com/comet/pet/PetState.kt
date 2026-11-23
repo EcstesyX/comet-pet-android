@@ -7,6 +7,11 @@ enum class PetState {
     THROWN,
     SLEEP,
     EAT,
+    HAPPY_PET,
     PETTED,
-    REACT
+    REACT,
+    REACT_LINK,
+    REACT_NUMBER,
+    REACT_CODE,
+    REACT_LONGTEXT
 }

@@ -299,7 +299,7 @@ class PetView(
                 }
             }
 
-            PetState.HAPPY_PET -> {
+            PetState.HAPPY_PET, PetState.PETTED -> {
                 if (stateTime > 2.2f) {
                     setState(PetState.IDLE)
                 }
@@ -309,8 +309,14 @@ class PetView(
                 // Snoozing peacefully
             }
 
-            PetState.REACT_LINK, PetState.REACT_NUMBER, PetState.REACT_CODE, PetState.REACT_LONGTEXT -> {
+            PetState.REACT_LINK, PetState.REACT_NUMBER, PetState.REACT_CODE, PetState.REACT_LONGTEXT, PetState.REACT -> {
                 if (stateTime > 3.8f) {
+                    setState(PetState.IDLE)
+                }
+            }
+
+            else -> {
+                if (stateTime > 2.0f) {
                     setState(PetState.IDLE)
                 }
             }
